@@ -63,6 +63,43 @@ public class HeroeController {
 //	  return daocontact.findAll();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping(path = {"/nombre/{nom}"})
+	public ResponseEntity<Object> findbyName(@PathVariable String nom){
+		System.out.println("paso por findbyName");
+		
+		List<Heroe> heroesFound = heroedao.findByNombre(nom);
+
+		if (heroesFound.size()>0) {	
+			
+			 for(Heroe her: heroesFound)
+		     {
+				 System.out.println("name:"+her.getNombre()+ her.getCasa());
+		     }
+		     
+			 JSONObject obj = new JSONObject();
+			 
+
+		      obj.put("error", 0);
+		      obj.put("results", heroesFound);
+		      
+		      
+		      
+
+		return ResponseEntity.ok().body(obj.toString());
+		}else {
+			JSONObject obj = new JSONObject();
+			 
+		   
+			obj.put("error", 1);
+			obj.put("description", "No data found");
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(obj.toString());
+		}
+//	  return daocontact.findAll();
+	}
+	
+	
 	@GetMapping(path = {"/{id}"})
 	public ResponseEntity<Heroe> findById(@PathVariable long id){
 		System.out.println("paso por /id");
